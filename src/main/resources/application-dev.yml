@@ -1,0 +1,127 @@
+server:
+  port: 8080
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 700
+    max-connections: 5000
+    max-http-post-size: 104857600
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/platform?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 123456
+    # 6.x版本的MySQL JDBC驱动类为com.mysql.cj.jdbc.Driver
+    # 5.X版本的MySQL JDBC驱动类为com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # Spring Boot中默认支持的连接池有dbcp,dbcp2, tomcat, hikari三种连接池
+    tomcat:
+      # 验证连接的有效性
+      test-while-idle: true
+      # 获取连接时候验证，会影响性能
+      test-on-borrow: false
+      # 在连接归还到连接池时是否测试该连接
+      test-on-return: false
+      validation-query: select 1
+      # 空闲连接回收的时间间隔，与test-while-idle一起使用，设置5分钟
+      time-between-eviction-runs-millis: 300000
+      # 连接池空闲连接的有效时间 ，设置30分钟
+      min-evictable-idle-time-millis: 1800000
+      # 初始大小
+      initial-size: 5
+      # 指定连接池中最大的活跃连接数.
+      max-active: 10
+      # 指定连接池等待连接返回的最大等待时间，毫秒单位.
+      max-wait: 60000
+      # 指定必须保持连接的最小值
+      min-idle: 2
+  # redis
+  redis:
+    # ip host
+    host: 127.0.0.1
+    # 端口
+    port: 6379
+    # 数据库
+    database: 0
+    # 数据库连接超时时间，2.0 中该参数的类型为Duration，这里在配置的时候需要指明单位
+    timeout: 60s
+    # 密码
+    password: 123456
+    # 连接池配置，2.0中直接使用jedis或者lettuce配置连接池
+    jedis:
+      pool:
+        # 最大活跃连接数，负数为不限制
+        max-active: 8
+        # 最大空闲连接数
+        max-idle: 5
+        # 最小空闲连接数
+        min-idle: 2
+        # 等待可用连接的最大时间，负数为不限制
+        max-wait:  -1s
+  jpa:
+    database: mysql
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+        ejb:
+          interceptor: pers.lance.platform.base.aspect.RecordEmptyInterceptor
+  # 出现错误时, 直接抛出异常(便于异常统一处理，否则捕获不到404)
+  mvc:
+    throw-exception-if-no-handler-found: true
+  # 不要为工程中的资源文件建立映射
+  resources:
+    add-mappings: false
+  #
+  devtools:
+    restart:
+      enabled: false
+mybatis:
+  configuration:
+    # 驼峰转换
+    mapUnderscoreToCamelCase: true
+logging:
+  level:
+    pers.lance.platform.dao.mapper: debug
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+shiro:
+  filter:
+    anon-paths: /static/**,/login,/adminLogin,/logout,/register,/swagger-ui.html,/swagger-resources/**,/v2/api-docs,/webjars/springfox-swagger-ui/**,/public/**
+    authc-paths: /**
+    login-url: /login
+  session:
+    # 30*60 s
+    expire: 1800
+swagger2:
+  title: platform 项目接口文档
+  description: platform 项目 Swagger2 Restful API
+  version: 1.0
+  base-package: pers.lance.platform.controller
+result:
+  except-paths: /swagger-resources/**,/v2/**
+executor:
+  # 最小线程数(核心线程数)
+  core-pool-size: 2
+  # 最大线程
+  max-pool-size: 4
+  # 等待队列(队列最大长度)
+  queue-capacity: 10
+  # 线程池维护线程所允许的空闲时间 ，单位s
+  keep-alive-seconds: 300
+  # 等待时间（默认为0，此时立即停止），等待xx秒后强制停止
+  await-termination-seconds: 60
+  # 当调度器shutdown被调用时 等待当前被调度的任务完成
+  wait-for-tasks-to-complete-on-shutdown: true
+  # 线程名称前缀
+  thread-name-prefix: COMMON-
+
+
+
