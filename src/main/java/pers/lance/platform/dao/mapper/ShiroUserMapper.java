@@ -1,13 +1,13 @@
 package pers.lance.platform.dao.mapper;
 
+import pers.lance.platform.bean.query.ShiroUserQuery;
+import pers.lance.platform.bean.vo.ShiroRoleVO;
+import pers.lance.platform.bean.vo.ShiroUserVO;
+import pers.lance.platform.bean.vo.UserLoginVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import pers.lance.platform.bean.vo.ShiroPermissionVO;
-import pers.lance.platform.bean.vo.ShiroRoleVO;
-import pers.lance.platform.bean.vo.UserLoginVO;
 
 import java.util.List;
-
 
 /**
  * Shiro User Mapper
@@ -34,14 +34,23 @@ public interface ShiroUserMapper {
      */
     List<ShiroRoleVO> listRoleVO(@Param("userId") String userId);
 
+
+
     /**
-     * 列表获取权限许可
+     * 列表查询获取 ShiroUserVO 结果集
      *
-     * @param roleId
-     * @param type
-     * @return
+     * @param queryParams 查询参数对象
+     * @return 分页返回 ShiroUserVO
      */
-    List<ShiroPermissionVO> listShiroPermissionVO(@Param("roleId") String roleId, @Param("type") String type);
+    List<ShiroUserVO> listShiroUserVO(ShiroUserQuery queryParams);
+
+    /**
+     * 通过id获取 ShiroUserVO
+     *
+     * @param id 对象id
+     * @return 对应的 ShiroUserVO 记录
+     */
+    ShiroUserVO getShiroUserVO(@Param("id") String id);
 
 
 }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybaits.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pers.lance.platform.dao.mapper.ShiroPermissionMapper">
+
+    <select id="listShiroPermissionVO"
+            parameterType="pers.lance.platform.bean.query.ShiroPermissionQuery"
+            resultType="pers.lance.platform.bean.vo.ShiroPermissionVO">
+        select t.*
+        from shiro_permission t
+        where 1=1
+        <if test="name != null and name !=''">
+            and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="code != null and code !=''">
+            and t.code like concat('%',#{code},'%')
+        </if>
+        <if test="type != null and type !=''">
+            and t.type like concat('%',#{type},'%')
+        </if>
+        order by t.id desc
+    </select>
+
+
+    <select id="listShiroPermissionVOByUserIdAndType"
+            resultType="pers.lance.platform.bean.vo.ShiroPermissionVO">
+        select t.*
+        from shiro_permission t
+        left join r_role_permission rrp on rrp.permission_id = t.id
+        left join r_user_role rur on rur.role_id = rrp.role_id
+        where rur.user_id = #{userId}
+        and t.type = #{type}
+        order by t.id desc
+    </select>
+
+    <select id="listShiroPermissionVOByRoleId"
+            resultType="pers.lance.platform.bean.vo.ShiroPermissionVO">
+        select t.*
+        from shiro_permission t
+        left join r_role_permission rrp on rrp.permission_id = t.id
+        where rrp.role_id = #{roleId}
+        order by t.id desc
+    </select>
+
+    <select id="getShiroPermissionVO" resultType="pers.lance.platform.bean.vo.ShiroPermissionVO">
+        select t.*
+        from shiro_permission t
+        where t.id = #{id}
+    </select>
+
+</mapper>

@@ -22,5 +22,5 @@ public class ShiroRoleVO implements Serializable {
 
     private String code;
 
-    private List<ShiroPermissionVO> permissions;
+    private List<ShiroPermissionVO> permissionVOList;
 }

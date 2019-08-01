@@ -1,22 +1,21 @@
-package pers.lance.platform.bean.vo;
+package pers.lance.platform.bean.query;
 
+import pers.lance.platform.base.bean.CommonQueryParams;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
-import java.io.Serializable;
+import lombok.EqualsAndHashCode;
 
 /**
- * 权限许可 VO
+ * shiro 权限许可 Query
  *
- * @author: lance
- * @create: 2018-11-16 14:57
+ * @author lance
+ * @date 2019-07-25T10:46:38.217
  */
 @Data
-@ApiModel("权限许可 VO")
-public class ShiroPermissionVO implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+@ApiModel("shiro 权限许可 Query")
+@EqualsAndHashCode(callSuper = true)
+public class ShiroPermissionQuery extends CommonQueryParams {
 
     @ApiModelProperty(name = "name", value = "权限名称", dataType = "String", example = "string")
     private String name;

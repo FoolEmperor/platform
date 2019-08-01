@@ -8,15 +8,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
@@ -37,16 +29,16 @@ public class ShiroUser extends BaseEntity {
     @Column(unique = true, columnDefinition = "varchar(50) comment '用户名'")
     private String username;
 
-    @Column(columnDefinition = "varchar(255) comment '用户真实姓名'")
+    @Column(columnDefinition = "varchar(255) default '' comment '用户真实姓名'")
     private String name;
 
-    @Column(columnDefinition = "varchar(255) comment '用户密码'")
+    @Column(columnDefinition = "varchar(255) default '' comment '用户密码'")
     private String password;
 
-    @Column(columnDefinition = "varchar(255) comment '手机号码'")
+    @Column(columnDefinition = "varchar(255) default '' comment '手机号码'")
     private String phoneNumber;
 
-    @Column(columnDefinition = "bit(1) default 1 comment '是有有效：1.有效;0.无效'")
+    @Column(columnDefinition = "bit(1) default 0 comment '是否启用：1.启用;0.未启用'")
     private Boolean enable;
 
     @CreatedDate
@@ -57,6 +49,6 @@ public class ShiroUser extends BaseEntity {
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")},
             uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role_id"})})
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<ShiroRole> roles;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    private List<ShiroRole> roleList;
 }

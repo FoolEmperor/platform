@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybaits.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pers.lance.platform.dao.mapper.ShiroRoleMapper">
+
+    <select id="listShiroRoleVOByUserId"
+            resultType="pers.lance.platform.bean.vo.ShiroRoleVO">
+         select p.*
+         from shiro_role r
+         join r_role_permission rp on r.id = rp.role_id
+         join shiro_permission p on rp.permission_id =p.id
+         where r.id = #{roleId}
+         and p.type = #{type}
+    </select>
+
+    <select id="listShiroRoleVOByPermissionId"
+            resultType="pers.lance.platform.bean.vo.ShiroRoleVO">
+        select count(t.*)
+        from shiro_role t
+        left join r_role_permission rrp on rrp.role_id = t.id
+        where  rrp.permission_id = #{permissionId}
+    </select>
+
+    <select id="listShiroRoleVO" parameterType="pers.lance.platform.bean.query.ShiroRoleQuery"
+            resultType="pers.lance.platform.bean.vo.ShiroRoleVO">
+        select t.*
+        from shiro_role t
+        where 1=1
+        <if test="name != null and name !=''">
+            and t.name like concat('%',#{name},'%')
+        </if>
+    </select>
+
+    <select id="getShiroRoleVO" resultType="pers.lance.platform.bean.vo.ShiroRoleVO">
+        select t.*
+        from shiro_role t
+        where t.id = #{id}
+    </select>
+
+</mapper>

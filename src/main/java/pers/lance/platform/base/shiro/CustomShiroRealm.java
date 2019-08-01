@@ -1,9 +1,12 @@
 package pers.lance.platform.base.shiro;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import pers.lance.platform.bean.vo.ShiroRoleVO;
 import pers.lance.platform.bean.entity.ShiroUser;
 import pers.lance.platform.bean.vo.ShiroPermissionVO;
 import pers.lance.platform.bean.vo.UserLoginVO;
+import pers.lance.platform.service.ShiroPermissionService;
+import pers.lance.platform.service.ShiroRoleService;
 import pers.lance.platform.service.ShiroUserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -30,8 +33,12 @@ import java.util.Objects;
  */
 public class CustomShiroRealm extends AuthorizingRealm {
 
-    @Resource
+    @Autowired
     private ShiroUserService shiroUserService;
+    @Autowired
+    private ShiroRoleService shiroRoleService;
+    @Autowired
+    private ShiroPermissionService shiroPermissionService;
 
     /**
      * 授权
@@ -44,14 +51,18 @@ public class CustomShiroRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         // 获取登录缓存
         UserLoginVO user = (UserLoginVO) principals.getPrimaryPrincipal();
-        // 获取角色权限
-        List<ShiroRoleVO> rolePermission = shiroUserService.findAuthorization(user.getId());
-        if (CollectionUtils.isNotEmpty(rolePermission)) {
-            for (ShiroRoleVO role : rolePermission) {
+        // 获取用户角色集合
+        List<ShiroRoleVO> roleVOList = shiroRoleService.listShiroRoleVOByUserId(user.getId());
+        if (CollectionUtils.isNotEmpty(roleVOList)) {
+            for (ShiroRoleVO role : roleVOList) {
                 authorizationInfo.addRole(role.getCode());
-                for (ShiroPermissionVO p : role.getPermissions()) {
-                    authorizationInfo.addStringPermission(p.getCode());
-                }
+            }
+        }
+        // 获取角色权限集合
+        List<ShiroPermissionVO> permissionVOList = shiroPermissionService.listShiroPermissionVOByUserId(user.getId());
+        if (CollectionUtils.isNotEmpty(permissionVOList)) {
+            for (ShiroPermissionVO p : permissionVOList) {
+                authorizationInfo.addStringPermission(p.getCode());
             }
         }
         return authorizationInfo;
@@ -67,7 +78,7 @@ public class CustomShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
             throws AuthenticationException {
-        //获取用户的输入的账号.
+        // 获取用户的输入的账号.
         String username = token.getPrincipal().toString();
         // 可根据实际情况做缓存，当然Shiro也有默认的时间间隔机制（2分钟内不会重复执行该方法）
         ShiroUser shiroUser = shiroUserService.findByUsername(username);

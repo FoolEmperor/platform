@@ -213,7 +213,8 @@ public class ShiroConfig {
     public CookieRememberMeManager cookieRememberMeManager(){
         CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
         cookieRememberMeManager.setCookie(rememberMeCookie());
-        cookieRememberMeManager.setCipherKey(Base64.decode("2AvVhdsgUs0FSA3SDFAdag=="));
+        // "2AvVhdsgUs0FSA3SDFAdag=="
+        cookieRememberMeManager.setCipherKey(Base64.decode("2AvVidsaUSofSA3SDFAdog=="));
         return cookieRememberMeManager;
     }
     @Bean
