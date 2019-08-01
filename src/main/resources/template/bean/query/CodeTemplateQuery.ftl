@@ -17,7 +17,7 @@ import pers.lance.platform.base.bean.CommonQueryParams;
 @EqualsAndHashCode(callSuper = true)
 public class CodeTemplateQuery extends CommonQueryParams {
 
-    @ApiModelProperty(name = "name", value = "名称", dataType = "String", example = "string")
+    @ApiModelProperty(name = "name", value = "名称", dataType = "java.lang.String", example = "string")
     private String name;
 
 }

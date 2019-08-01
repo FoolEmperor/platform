@@ -116,10 +116,6 @@ public class CodeGenerateUtils {
 
     private static boolean isTemplate = Boolean.TRUE;
 
-    public static void main(String[] args) {
-        generate();
-    }
-
     /**
      * 代码生成
      */
@@ -286,7 +282,7 @@ public class CodeGenerateUtils {
                 PrintWriter printWriter = new PrintWriter(targetFilePath);
         ) {
             // 文件后缀
-            String suffix = getSuffix(sourceFile.getName());
+            String suffix = getSuffix(targetFilePath);
             StringBuffer strBuffer = new StringBuffer();
             for (String temp = null; (temp = bufReader.readLine()) != null; temp = null) {
                 // 对文件内容做相应更改
